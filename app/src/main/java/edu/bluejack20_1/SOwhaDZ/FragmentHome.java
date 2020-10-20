@@ -204,6 +204,71 @@ public class FragmentHome extends Fragment {
         btnAntonym = view.findViewById(R.id.antonym_card_submit);
 
 
+        try {
+            FileInputStream fin = getContext().openFileInput("date.txt");
+            InputStreamReader isr = new InputStreamReader(fin);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String c;
+            while ((c = br.readLine()) != null) {
+                sb.append(c);
+            }
+
+            String[] splitted = sb.toString().split(" ");
+            int day = Integer.parseInt(splitted[0]);
+            int month = Integer.parseInt(splitted[1]);
+            int year = Integer.parseInt(splitted[2]);
+
+            Calendar cld = new GregorianCalendar(year,month-1,day);
+
+            if(cld.getTime().compareTo(Calendar.getInstance().getTime()) <= 0){
+                //update tanggal
+                //random
+                WordLibrary wordLibrary = new WordLibrary();
+                String word;
+                word = wordLibrary.getRandomwordEnglish();
+
+                FileOutputStream fos = null;
+                try {
+                    fos = getContext().openFileOutput("wotd.txt", Context.MODE_PRIVATE);
+                    fos.write(word.getBytes());
+//                    Toast.makeText(getActivity(),"Saatnya random wotd",Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Saved to " + context.getFilesDir() + "/" + "wotd.txt",
+//                        Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (fos != null) {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+
+                updateTanggal();
+
+            }
+
+
+            fin.close();
+        } catch (FileNotFoundException e) {
+            //klo date.txt g ada
+            try {
+                updateTanggal();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } catch (IOException e) {
+            //kalo fin.close error
+            e.printStackTrace();
+        }
+
+
         FileInputStream fis = null;
         try {
             fis = getContext().openFileInput("wotd.txt");
@@ -252,64 +317,6 @@ public class FragmentHome extends Fragment {
                 }
             }
         }
-
-        dDatabase = FirebaseDatabase.getInstance().getReference("lastRandom");
-
-        dDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                day = Integer.parseInt(snapshot.child("day").getValue().toString());
-                month = Integer.parseInt(snapshot.child("month").getValue().toString());
-                year = Integer.parseInt(snapshot.child("year").getValue().toString());
-//                titleWordOfTheDay.setText(day +" "+ month +" "+ year);
-                Calendar cld = new GregorianCalendar(year,month-1,day);
-//                cld.set(Calendar.DAY_OF_MONTH,day);
-//                cld.set(Calendar.MONTH, month);
-//                cld.set(Calendar.YEAR, year);
-//                cld.set(Calendar.HOUR_OF_DAY , 0);
-//                cld.set(Calendar.MINUTE , 0);
-//                cld.set(Calendar.SECOND, 0);
-//                Toast.makeText(getActivity(),cld.getTime()+" " +Calendar.getInstance().getTime(),Toast.LENGTH_LONG).show();
-
-                if(cld.getTime().compareTo(Calendar.getInstance().getTime()) <= 0){
-                    //update tanggal
-                    //random
-//                    Toast.makeText(getActivity(),(cld.getTime().compareTo(Calendar.getInstance().getTime()) < 0)+"",Toast.LENGTH_LONG).show();
-                    WordLibrary wordLibrary = new WordLibrary();
-                    String word;
-                    word = wordLibrary.getRandomwordEnglish();
-
-                    FileOutputStream fos = null;
-                    try {
-                        fos = getContext().openFileOutput("wotd.txt", Context.MODE_PRIVATE);
-                        fos.write(word.getBytes());
-//                Toast.makeText(context, "Saved to " + context.getFilesDir() + "/" + "wotd.txt",
-//                        Toast.LENGTH_LONG).show();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (fos != null) {
-                            try {
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-
-                    updateTanggal();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 //        pindahin ke user page
         cdImageUser.setOnClickListener(new View.OnClickListener() {
@@ -522,7 +529,7 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
-    private void updateTanggal(){
+    private void updateTanggal() throws IOException {
 
 
         Calendar now = Calendar.getInstance();
@@ -534,68 +541,101 @@ public class FragmentHome extends Fragment {
         int second = now.get(Calendar.SECOND);
 //            titleWordOfTheDay.setText( year+" "+month+" "+day);
 //            cld.add(Calendar.DAY_OF_MONTH,1);
-            Map<String, Object> taskMap = new HashMap<String, Object>();
-            if(month == 1 || month == 3 || month==5 || month == 7 || month == 8 || month == 10 || month ==12){
-                if(day == 31){
-                    if(month == 12){
-                        taskMap.put("day", 1);
-                        taskMap.put("month",1);
-                        taskMap.put("year",year + 1);
-                    }
-                    else{
-                        taskMap.put("day", 1);
-                        taskMap.put("month",month +1);
-                        taskMap.put("year",year);
-                    }
+        Map<String, Object> taskMap = new HashMap<String, Object>();
+        if(month == 1 || month == 3 || month==5 || month == 7 || month == 8 || month == 10 || month ==12){
+            if(day == 31){
+                if(month == 12){
+                    taskMap.put("day", 1);
+                    taskMap.put("month",1);
+                    taskMap.put("year",year + 1);
+                    day = 1;
+                    month = 1;
+                    year += 1;
+                }
+                else{
+                    taskMap.put("day", 1);
+                    taskMap.put("month",month +1);
+                    taskMap.put("year",year);
+                    day = 1;
+                    month += 1;
+                    year = year;
+                }
 
-                }
-                else{
-                    taskMap.put("day", day+1);
-                    taskMap.put("month",month);
-                    taskMap.put("year",year);
-                }
             }
-            else if(month == 2 && year %4 == 0){
-                if(day == 29){
-                    if(month == 12){
-                        taskMap.put("day", 1);
-                        taskMap.put("month",1);
-                        taskMap.put("year",year + 1);
-                    }
-                    else{
-                        taskMap.put("day", 1);
-                        taskMap.put("month",month +1);
-                        taskMap.put("year",year);
-                    }
+            else{
+                taskMap.put("day", day+1);
+                taskMap.put("month",month);
+                taskMap.put("year",year);
+                day += 1;
+                month = month;
+                year = year;
+            }
+        }
+        else if(month == 2 && year %4 == 0){
+            if(day == 29){
+                if(month == 12){
+                    taskMap.put("day", 1);
+                    taskMap.put("month",1);
+                    taskMap.put("year",year + 1);
+                    day = 1;
+                    month = 1;
+                    year += 1;
                 }
                 else{
-                    taskMap.put("day", day+1);
-                    taskMap.put("month",month);
+                    taskMap.put("day", 1);
+                    taskMap.put("month",month +1);
                     taskMap.put("year",year);
+                    day = 1;
+                    month += 1;
+                    year = year;
                 }
             }
             else{
-                if(day == 30){
-                    if(month == 12){
-                        taskMap.put("day", 1);
-                        taskMap.put("month",1);
-                        taskMap.put("year",year + 1);
-                    }
-                    else{
-                        taskMap.put("day", 1);
-                        taskMap.put("month",month +1);
-                        taskMap.put("year",year);
-                    }
-
+                taskMap.put("day", day+1);
+                taskMap.put("month",month);
+                taskMap.put("year",year);
+                day += 1;
+                month = month;
+                year = year;
+            }
+        }
+        else{
+            if(day == 30){
+                if(month == 12){
+                    taskMap.put("day", 1);
+                    taskMap.put("month",1);
+                    taskMap.put("year",year + 1);
+                    day = 1;
+                    month = 1;
+                    year += 1;
                 }
                 else{
-                    taskMap.put("day", day+1);
-                    taskMap.put("month",month);
+                    taskMap.put("day", 1);
+                    taskMap.put("month",month +1);
                     taskMap.put("year",year);
+                    day = 1;
+                    month += 1;
+                    year = year;
                 }
 
+            }
+            else{
+                taskMap.put("day", day+1);
+                taskMap.put("month",month);
+                taskMap.put("year",year);
+                day += 1;
+                month = 1;
+                year = year;
+            }
+
         }
-            FirebaseDatabase.getInstance().getReference().child("lastRandom").updateChildren(taskMap);
+//            FirebaseDatabase.getInstance().getReference().child("lastRandom").updateChildren(taskMap);
+
+        FileOutputStream fOut = getContext().openFileOutput("date.txt",Context.MODE_PRIVATE);
+        String str = day + " " + month + " " + year;
+        fOut.write(str.getBytes());
+        fOut.close();
+//        Toast.makeText(getActivity(),"update tanggal jadi besok "+day+" "+month+ " "+year,Toast.LENGTH_LONG).show();
         FileInputStream fis = null;
         try {
             fis = getContext().openFileInput("wotd.txt");
