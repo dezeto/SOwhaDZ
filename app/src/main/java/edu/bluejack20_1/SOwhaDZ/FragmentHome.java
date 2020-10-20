@@ -164,7 +164,8 @@ public class FragmentHome extends Fragment {
 
         // Inflate the layout for this fragment
 //        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        View view =  inflater.inflate(R.layout.fragment_home, container, false);
+
+        final View view =  inflater.inflate(R.layout.fragment_home, container, false);
 //        Calendar calendar = Calendar.getInstance();
 //
 //        Intent intent = new Intent(getApplicationContext())
@@ -330,7 +331,7 @@ public class FragmentHome extends Fragment {
         cdwordOfTheDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), DetailTranslationActivity.class);
+                Intent intent = new Intent(getContext(), DetailTranslationActivity.class);
                 intent.putExtra("data1", titleWordOfTheDay.getText().toString());
                 intent.putExtra("data2", descWordOfTheDay.getText().toString());
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
@@ -341,13 +342,15 @@ public class FragmentHome extends Fragment {
             @Override
             public void onClick(View v) {
                 listItems = new String[]{"Indonesia", "English"};
-                MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(getActivity()));
+                MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(getContext()));
+
                 mBuilder.setTitle("Choose the language");
                 mBuilder.setItems(listItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
 //                        .setText(listItems[i]);
-                        Intent intent = new Intent(getActivity(), TranslateItActivity.class);
+
+                        Intent intent = new Intent(getContext(), TranslateItActivity.class);
 
                         if(i == 0){
                             preferredLanguage = "id";
@@ -445,7 +448,15 @@ public class FragmentHome extends Fragment {
                 Boolean flag = false;
                 for (int i=0;i<userList.size();i++){
                     if(userList.get(i).getEmail().equals(email)){
-                        highscoreTranslateIt.setText(getResources().getString(R.string.highscore)  + " : " +userList.get(i).getHighscore() +"");
+                        try {
+
+//                            highscoreTranslateIt.setText(getResources().getString(R.string.highscore)  + " : " +userList.get(i).getHighscore() +"");
+
+                            highscoreTranslateIt.setText(getResources().getString(R.string.highscore)+ " : " + userList.get(i).getHighscore() +"");
+                        }catch (Exception e){
+                           highscoreTranslateIt = view.findViewById(R.id.translate_it_highscore);
+//                            highscoreTranslateIt.setText("HIGHSCORES" + " : " + userList.get(i).getHighscore() +"");
+                        }
                         idKey = userList.get(i).getIdKey();
                         highscore = userList.get(i).getHighscore();
                         flag = true;

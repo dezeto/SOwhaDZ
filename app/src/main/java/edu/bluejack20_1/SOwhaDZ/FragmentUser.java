@@ -138,7 +138,8 @@ public class FragmentUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_user, container, false);
+
+        final View view =  inflater.inflate(R.layout.fragment_user, container, false);
         sref = FirebaseStorage.getInstance().getReference("Images");
 
         btnPreferredLanguage = view.findViewById(R.id.user_preferred_language);
@@ -178,7 +179,9 @@ public class FragmentUser extends Fragment {
             else{
                 photo = personPhoto.toString();
             }
-            Glide.with(getActivity().getApplicationContext()).load(photo).into(userProfile);
+
+            Glide.with(Objects.requireNonNull(getActivity()).getApplicationContext()).load(photo).into(userProfile);
+
             userEmail.setText(personEmail);
             userName.setText(username);
         }
@@ -353,9 +356,19 @@ public class FragmentUser extends Fragment {
                     if(userList.get(i).getId().equals(FragmentHome.id)){
                         idKey = userList.get(i).getIdKey();
                         if (userList.get(i).getPhoto() == null || userList.get(i).getPhoto().equals("")) {
-                            Glide.with(getActivity().getApplicationContext()).load("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png").into(userProfile);
+
+                            try {
+                                Glide.with(Objects.requireNonNull(getActivity()).getApplicationContext()).load("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png").into(userProfile);
+                            }catch (Exception e){
+                                userProfile = view.findViewById(R.id.user_profile_pic);
+                            }
                         } else {
-                            Glide.with(getActivity().getApplicationContext()).load(String.valueOf(userList.get(i).getPhoto())).into(userProfile);
+                            try {
+
+                                Glide.with(Objects.requireNonNull(getActivity()).getApplicationContext()).load(String.valueOf(userList.get(i).getPhoto())).into(userProfile);
+                            }catch (Exception e){
+                                userProfile = view.findViewById(R.id.user_profile_pic);
+                            }
                         }
 //                        Toast.makeText(getActivity(),idKey,Toast.LENGTH_SHORT).show();
                     }
