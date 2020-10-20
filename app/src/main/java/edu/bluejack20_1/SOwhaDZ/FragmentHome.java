@@ -187,9 +187,9 @@ public class FragmentHome extends Fragment {
 //        Image
         imgUser = view.findViewById(R.id.home_user_image);
 
-        titleWordOfTheDay.setText("Title");
-        descWordOfTheDay.setText("desc");
-        highscoreTranslateIt.setText("Highscore : " + 123);
+//        titleWordOfTheDay.setText("Title");
+//        descWordOfTheDay.setText("desc");
+//        highscoreTranslateIt.setText(" : " + 123);
 
 //        user
         usernameTxtView.setText(username);
@@ -269,12 +269,12 @@ public class FragmentHome extends Fragment {
 //                cld.set(Calendar.HOUR_OF_DAY , 0);
 //                cld.set(Calendar.MINUTE , 0);
 //                cld.set(Calendar.SECOND, 0);
-                Toast.makeText(getActivity(),cld.getTime()+" " +Calendar.getInstance().getTime(),Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(),cld.getTime()+" " +Calendar.getInstance().getTime(),Toast.LENGTH_LONG).show();
 
                 if(cld.getTime().compareTo(Calendar.getInstance().getTime()) <= 0){
                     //update tanggal
                     //random
-                    Toast.makeText(getActivity(),(cld.getTime().compareTo(Calendar.getInstance().getTime()) < 0)+"",Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getActivity(),(cld.getTime().compareTo(Calendar.getInstance().getTime()) < 0)+"",Toast.LENGTH_LONG).show();
                     WordLibrary wordLibrary = new WordLibrary();
                     String word;
                     word = wordLibrary.getRandomwordEnglish();
@@ -438,7 +438,7 @@ public class FragmentHome extends Fragment {
                 Boolean flag = false;
                 for (int i=0;i<userList.size();i++){
                     if(userList.get(i).getEmail().equals(email)){
-                        highscoreTranslateIt.setText("Highscore : " +userList.get(i).getHighscore() +"");
+                        highscoreTranslateIt.setText(getResources().getString(R.string.highscore)  + " : " +userList.get(i).getHighscore() +"");
                         idKey = userList.get(i).getIdKey();
                         highscore = userList.get(i).getHighscore();
                         flag = true;
@@ -496,7 +496,27 @@ public class FragmentHome extends Fragment {
 
         }
         else{
-            requestApiButtonClick();
+//            requestApiButtonClick();
+            DatabaseReference ddata;
+            ddata = FirebaseDatabase.getInstance().getReference();
+            ddata= ddata.child("definition");
+
+
+            final ArrayList<String> definitionList = new ArrayList<>();
+
+            ddata.addValueEventListener(new ValueEventListener(){
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    definitionList.clear();
+                    definitionList.add(snapshot.child(titleWordOfTheDay.getText().toString()).getValue().toString());
+                    descWordOfTheDay.setText(definitionList.get(0));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
 
         return view;

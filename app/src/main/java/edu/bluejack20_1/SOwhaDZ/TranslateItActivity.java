@@ -75,32 +75,32 @@ public class TranslateItActivity extends AppCompatActivity {
         });
 
 //            SET TEXT
-        txtHighscore.setText("HIGHSCORE");
-        txtlanguage.setText("LANGUAGE");
-        getData();
-        txtPoints.setText("POINTS");
-        txtCountdown.setText("60s");
-        title.setText("BONJOUR");
+//        txtHighscore.setText("HIGHSCORE");
+//        txtlanguage.setText("LANGUAGE");
+//        getData();
+//        txtPoints.setText("POINTS");
+//        txtCountdown.setText("60s");
+//        title.setText("BONJOUR");
 
         //  CHOICE
-        txtChoice1.setText("CHOICE 1");
-        txtChoice2.setText("CHOICE 2");
-        txtChoice3.setText("CHOICE 3");
-        txtChoice4.setText("CHOICE 4");
+//        txtChoice1.setText("CHOICE 1");
+//        txtChoice2.setText("CHOICE 2");
+//        txtChoice3.setText("CHOICE 3");
+//        txtChoice4.setText("CHOICE 4");
 
 
         choices.add(txtChoice1);
         choices.add(txtChoice2);
         choices.add(txtChoice3);
         choices.add(txtChoice4);
-        txtHighscore.setText("HIGHSCORE : "+FragmentHome.highscore +"");
-        txtattempt.setText((3-wrongCount)+" attempt left");
+        txtHighscore.setText(getResources().getString(R.string.highscore) + " : "+FragmentHome.highscore +"");
+        txtattempt.setText((3-wrongCount)+ " "  + getResources().getString(R.string.attempt_left));
         resetQuestion();
 
         final CountDownTimer countDownTimer = new CountDownTimer(11000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                txtCountdown.setText(millisUntilFinished/1000 + "s left");
+                txtCountdown.setText(millisUntilFinished/1000 + "s " + getResources().getString(R.string.time_left));
                 if(wrongCount < 3){
                     cdChoice1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -111,7 +111,7 @@ public class TranslateItActivity extends AppCompatActivity {
                                 }
                                 else{
                                     wrongCount++;
-                                    txtattempt.setText((3-wrongCount)+" attempt left");
+                                    txtattempt.setText((3-wrongCount)+ " "  + getResources().getString(R.string.attempt_left));
                                 }
                                 resetQuestion();
                                 start();
@@ -127,7 +127,7 @@ public class TranslateItActivity extends AppCompatActivity {
                                 }
                                 else{
                                     wrongCount++;
-                                    txtattempt.setText((3-wrongCount)+" attempt left");
+                                    txtattempt.setText((3-wrongCount)+" "  + getResources().getString(R.string.attempt_left));
                                 }
                                 resetQuestion();
                                 start();
@@ -144,7 +144,7 @@ public class TranslateItActivity extends AppCompatActivity {
                                 }
                                 else{
                                     wrongCount++;
-                                    txtattempt.setText((3-wrongCount)+" attempt left");
+                                    txtattempt.setText((3-wrongCount)+" "  + getResources().getString(R.string.attempt_left));
                                 }
                                 resetQuestion();
                                 start();
@@ -162,7 +162,7 @@ public class TranslateItActivity extends AppCompatActivity {
                                 }
                                 else{
                                     wrongCount++;
-                                    txtattempt.setText((3-wrongCount)+" attempt left");
+                                    txtattempt.setText((3-wrongCount)+" "  + getResources().getString(R.string.attempt_left));
                                 }
                                 resetQuestion();
                                 start();
@@ -172,10 +172,10 @@ public class TranslateItActivity extends AppCompatActivity {
                     });
                 }
                 else{
-                    title.setText("YOU LOSE");
+                    title.setText(getResources().getString(R.string.you_lost));
                     cancel();
                     if(score > FragmentHome.highscore){
-                        txtHighscore.setText("HIGHSCORE : "+score+"");
+                        txtHighscore.setText(getResources().getString(R.string.highscore) +" : "+score+"");
                         updateUser();
                     }
                 }
@@ -192,14 +192,14 @@ public class TranslateItActivity extends AppCompatActivity {
 
                     this.start();
                     wrongCount++;
-                    txtattempt.setText((3-wrongCount)+" attempt left");
+                    txtattempt.setText((3-wrongCount)+" "  + getResources().getString(R.string.attempt_left));
 
                 }else{
                     title.setText("YOU LOSE");
                     cancel();
                     if(score > FragmentHome.highscore){
                         updateUser();
-                        txtHighscore.setText("HIGHSCORE : "+score+"");
+                        txtHighscore.setText(getResources().getString(R.string.highscore) + " : "+score+"");
                     }
                 }
 
@@ -219,7 +219,7 @@ public class TranslateItActivity extends AppCompatActivity {
             txtlanguage.setText(getIntent().getStringExtra("txtLanguage"));
 //            data2 = getIntent().getStringExtra("data2");
         }else{
-            Toast.makeText(this,"NO LANGUAGE SELECTED",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"NO LANGUAGE SELECTED",Toast.LENGTH_SHORT).show();
         }
     }
 

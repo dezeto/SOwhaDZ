@@ -184,10 +184,34 @@ public class FragmentTranslate extends Fragment {
                         historiesWord.add(his);
                     }
                 }
-                Collections.reverse(historiesDef);
-                Collections.reverse(historiesWord);
-                s1 = historiesWord;
-                s2 = historiesDef;
+
+                ArrayList<History> newDef = new ArrayList<>();
+                ArrayList<History> newWord = new ArrayList<>();
+
+                int size = 5;
+                int position = historiesDef.size() - 1;
+                for (int k = 0; k < size; k++){
+                    if ((historiesDef.size()) > k){
+                        newDef.add(historiesDef.get(position));
+                        newWord.add(historiesWord.get(position));
+                        position--;
+                    }
+                }
+
+//                for(int k=0;historiesDef.get(k)!=null && k < 5 && historiesDef.size() > k;k++){
+//                    newDef.add(historiesDef.get(k));
+//                    newWord.add(historiesWord.get(k));
+//                }
+
+                s1 = newWord;
+                s2 = newDef;
+
+
+//                Collections.reverse(historiesDef);
+//                Collections.reverse(historiesWord);
+//
+//                s1 = historiesWord;
+//                s2 = historiesDef;
 
                 historyRecycler = view.findViewById(R.id.history_recycler_views);
 
@@ -204,14 +228,46 @@ public class FragmentTranslate extends Fragment {
                     }
 
                     @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+
+                        final MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(getActivity());
 
                         int position = viewHolder.getAdapterPosition();
-                        deleteOne(position);
-                        s1.remove(position);
-                        s2.remove(position);
 
-                        historyAdapter.notifyItemRemoved(position);
+                        mBuilder.setTitle(getResources().getString(R.string.confirm_deletion))
+                                .setMessage(getResources().getString(R.string.are_you_sure_to_delete) + " " + s1.get(position).getWord() + " ?")
+                                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        int position = viewHolder.getAdapterPosition();
+
+                                        historyAdapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int position = viewHolder.getAdapterPosition();
+
+                                        deleteOne(position);
+                                        s1.remove(position);
+                                        s2.remove(position);
+
+                                        historyAdapter.notifyItemRemoved(position);
+//                                        etHistoryInput.setText("");
+                                    }
+                                })
+                                .show();
+
+
+
+//                        int position = viewHolder.getAdapterPosition();
+//                        deleteOne(position);
+//                        s1.remove(position);
+//                        s2.remove(position);
+//
+//                        historyAdapter.notifyItemRemoved(position);
 
 //                        MASUKKIN KODINGNAN DELETE HISTORY ONE BY ONE
 

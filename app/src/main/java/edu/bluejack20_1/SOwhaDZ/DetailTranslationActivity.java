@@ -65,7 +65,7 @@ public class DetailTranslationActivity extends AppCompatActivity {
                         speech.setEnabled(true);
                     }
                 }else{
-                    Log.e("TTS","Init Failed");
+//                    Log.e("TTS","Init Failed");
                 }
             }
         });

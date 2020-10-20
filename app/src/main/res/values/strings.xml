@@ -31,21 +31,33 @@
     <string name="choose_preferred_language">Choose preferred language</string>
     <string name="share_app">Share app</string>
     <string name="sign_out">Sign out</string>
-    <string name="email" translatable="false">email</string>
-    <string name="word_of_the_day_desc" translatable="false">Explore the word of the day !</string>
-    <string name="from" translatable="false">From</string>
-    <string name="sign_in" translatable="false">Sign in</string>
-    <string name="next" translatable="false">Next</string>
-    <string name="back" translatable="false">Back</string>
-    <string name="change_theme" translatable="false">Change theme</string>
-    <string name="intro_desc1" translatable="false">Just type it and you can understand it</string>
-    <string name="intro_desc2" translatable="false">Just speak and we will translate it </string>
-    <string name="intro_desc3" translatable="false">Take a picture, and walaaa you got it</string>
+    <string name="email">email</string>
+    <string name="word_of_the_day_desc">Explore the word of the day !</string>
+    <string name="from">From</string>
+    <string name="sign_in">Sign in</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="change_theme">Change theme</string>
+    <string name="intro_desc1">Just type it and you can understand it</string>
+    <string name="intro_desc2">Just speak and we will translate it </string>
+    <string name="intro_desc3">Take a picture, and walaaa you got it</string>
     <string name="intro_translate_it" translatable="false">Translate It !</string>
     <string name="intro_scan_it" translatable="false">Scan It !</string>
     <string name="intro_speak_it" translatable="false">Speak It !</string>
-    <string name="by" translatable="false">By</string>
-    <string name="detail_transaction" translatable="false">Detail Transaction</string>
+    <string name="by">By</string>
+    <string name="detail_transaction">Translation Detail</string>
+    <string name="time">Time</string>
+    <string name="language">language</string>
+    <string name="history">History</string>
+    <string name="confirm_deletion">Confirm Deletion</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete </string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm </string>
+    <string name="attempt_left">Attempt(s) left</string>
+    <string name="time_left">Time left</string>
+    <string name="you_lost">You lose</string>
+    <string name="history_count" translatable="false">History count(s)</string>
+
 
     <string-array name="programming_languages">
         <item>Python</item>

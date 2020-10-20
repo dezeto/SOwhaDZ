@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,7 +105,7 @@ public class HistoryActivity extends AppCompatActivity {
                 s2 = historiesDef;
 
                 historyRecycler = findViewById(R.id.history_recycler_views);
-                String historyCount = s1.size() + " History Counts";
+                String historyCount = s1.size() + " " + getResources().getString(R.string.history_count);
                 tvHistoryCount.setText(historyCount);
 
                 historyAdapter = new HistoryRecyclerAdapter(HistoryActivity.this,s1,s2);
@@ -118,16 +120,47 @@ public class HistoryActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
+
+                        final MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(HistoryActivity.this);
 
                         int position = viewHolder.getAdapterPosition();
-//                        Toast.makeText(HistoryActivity.this,s1.get(position).getWord().toString(),Toast.LENGTH_SHORT).show();
-                        deleteOne(position);
-                        s1.remove(position);
-                        s2.remove(position);
 
-                        historyAdapter.notifyItemRemoved(position);
-                        etHistoryInput.setText("");
+                        mBuilder.setTitle(getResources().getString(R.string.confirm_deletion))
+                                .setMessage(getResources().getString(R.string.are_you_sure_to_delete) + " " + s1.get(position).getWord() + " ?")
+                                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        int position = viewHolder.getAdapterPosition();
+
+                                        historyAdapter.notifyDataSetChanged();
+                                    }
+                                })
+                                .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int position = viewHolder.getAdapterPosition();
+
+                                        deleteOne(position);
+                                        s1.remove(position);
+                                        s2.remove(position);
+
+                                        historyAdapter.notifyItemRemoved(position);
+                                        etHistoryInput.setText("");
+                                    }
+                                })
+                                .show();
+
+
+//                        int position = viewHolder.getAdapterPosition();
+////                        Toast.makeText(HistoryActivity.this,s1.get(position).getWord().toString(),Toast.LENGTH_SHORT).show();
+//                        deleteOne(position);
+//                        s1.remove(position);
+//                        s2.remove(position);
+//
+//                        historyAdapter.notifyItemRemoved(position);
+//                        etHistoryInput.setText("");
 //                        MASUKKIN KODINGNAN DELETE HISTORY ONE BY ONE
 
 
@@ -214,17 +247,50 @@ public class HistoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
 
+
+                final MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(HistoryActivity.this);
+
+                Toast.makeText(HistoryActivity.this, "SWIPERD", Toast.LENGTH_LONG).show();
                 int position = viewHolder.getAdapterPosition();
-                s1.remove(position);
-                s2.remove(position);
-                historyAdapter.notifyItemRemoved(position);
+
+                mBuilder.setTitle(getResources().getString(R.string.confirm_deletion))
+                        .setMessage(getResources().getString(R.string.are_you_sure_to_delete) + " " + s1.get(position).getWord() + " ?")
+                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                int position = viewHolder.getAdapterPosition();
+
+                                historyAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int position = viewHolder.getAdapterPosition();
+
+                                deleteOne(position);
+                                s1.remove(position);
+                                s2.remove(position);
+
+                                historyAdapter.notifyItemRemoved(position);
+                                etHistoryInput.setText("");
+                            }
+                        })
+                        .show();
+
+            }
+//                int position = viewHolder.getAdapterPosition();
+//                s1.remove(position);
+//                s2.remove(position);
+//                historyAdapter.notifyItemRemoved(position);
 
 //                        MASUKKIN KODINGNAN DELETE HISTORY ONE BY ONE
 
 
-            }
+
         };
 
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
