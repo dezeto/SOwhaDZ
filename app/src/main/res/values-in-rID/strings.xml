@@ -49,4 +49,5 @@
     <string name="attempt_left" translatable="false">Kesempatan Lagi</string>
     <string name="only_title" translatable="false">Judul</string>
     <string name="history_count" translatable="false">Jumlah riwayat</string>
+    <string name="all_history" translatable="false">semua riwayat</string>
 </resources>

@@ -193,7 +193,39 @@ public class HistoryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String input = etHistoryInput.getText().toString();
 //                HAPUS SEMUA FUNCTION
-                deleteAll();
+                final MaterialAlertDialogBuilder mBuilder = new MaterialAlertDialogBuilder(HistoryActivity.this);
+
+//                int position = viewHolder.getAdapterPosition();
+
+                mBuilder.setTitle(getResources().getString(R.string.confirm_deletion))
+                        .setMessage(getResources().getString(R.string.are_you_sure_to_delete) + " " + getResources().getString(R.string.all_history)+ " ?")
+                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+//                                int position = viewHolder.getAdapterPosition();
+
+//                                historyAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setPositiveButton(getResources().getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+//                                int position = viewHolder.getAdapterPosition();
+////
+////                                deleteOne(position);
+////                                s1.remove(position);
+////                                s2.remove(position);
+                                deleteAll();
+
+                                historyAdapter.notifyDataSetChanged();
+
+//                                historyAdapter.notifyItemRemoved(position);
+//                                        etHistoryInput.setText("");
+                            }
+                        })
+                        .show();
+//                deleteAll();
             }
         });
 //

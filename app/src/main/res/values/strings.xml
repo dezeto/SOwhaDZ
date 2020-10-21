@@ -57,6 +57,7 @@
     <string name="time_left">Time left</string>
     <string name="you_lost">You lose</string>
     <string name="history_count" translatable="false">History count(s)</string>
+    <string name="all_history" translatable="false">all history</string>
 
 
     <string-array name="programming_languages">
